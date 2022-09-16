@@ -32,6 +32,8 @@ spec:
       labels:
         app.kubernetes.io/name: jupyterpy 
     spec:
+      securityContext:
+        fsGroup: 100
       containers:
         - name: jupyterpy 
           image: jupyter/datascience-notebook
@@ -41,4 +43,11 @@ spec:
             - name: http
               containerPort: 8888 
               protocol: TCP
-
+          volumeMounts:
+            - name: work 
+              mountPath: /home/jovyan/work
+      volumes:
+        - name: work
+          hostPath:
+            path: /storage/k3s/sljupyterpy
+            type: DirectoryOrCreate
